@@ -1,6 +1,6 @@
+```yaml
 name: CD (deploy to Cloud Run)
 
-# Runs on every push to main
 on:
   push:
     branches: [main]
@@ -8,7 +8,7 @@ on:
 
 permissions:
   contents: read
-  id-token: write   # needed for keyless auth to Google Cloud
+  id-token: write
 
 env:
   SERVICE: quill
@@ -17,19 +17,29 @@ env:
 jobs:
   test:
     runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: email-agent
+
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
           cache: pip
+          cache-dependency-path: email-agent/requirements.txt
+
       - run: pip install -r requirements.txt
+
       - run: python -m pytest -v
 
   deploy:
     needs: test
     if: ${{ vars.GCP_PROJECT_ID != '' }}
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
 
@@ -41,6 +51,7 @@ jobs:
       - uses: google-github-actions/setup-gcloud@v2
 
       - name: Build and push image
+        working-directory: email-agent
         run: |
           gcloud auth configure-docker "${{ vars.GCP_REGION }}-docker.pkg.dev" --quiet
           IMAGE="${{ vars.GCP_REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/${REPO}/${SERVICE}:${GITHUB_SHA}"
@@ -48,9 +59,9 @@ jobs:
           docker push "$IMAGE"
           echo "IMAGE=$IMAGE" >> "$GITHUB_ENV"
 
-      # Only the image changes; env vars and secrets set at first deploy are kept.
       - uses: google-github-actions/deploy-cloudrun@v2
         with:
           service: ${{ env.SERVICE }}
           region: ${{ vars.GCP_REGION }}
           image: ${{ env.IMAGE }}
+```
