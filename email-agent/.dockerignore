@@ -1,0 +1,12 @@
+.git
+.github
+.venv
+__pycache__
+*.pyc
+.pytest_cache
+.env
+.streamlit/secrets.toml
+checkpoints.db*
+tests
+docs
+deploy
