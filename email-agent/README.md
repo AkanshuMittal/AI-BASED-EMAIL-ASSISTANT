@@ -5,7 +5,7 @@
 
 Describe an email in plain language. Quill extracts the recipient and intent, drafts it with an LLM, and **pauses for your approval** before anything is sent. Emails go out from the user's own Google account, or the user can copy the draft.
 
-**Live demo:** <your-cloud-run-url>
+**Live demo:** https://ai-based-email-agent-7u4qk6a3oa-el.a.run.app
 
 <!-- screenshot / GIF here -->
 
