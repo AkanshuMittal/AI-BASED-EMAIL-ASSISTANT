@@ -1,4 +1,4 @@
-# Quill: AI Based Email Agent
+# AI Based Email Assistant
 
 **Describe an email in plain language. The agent drafts it, you review and approve, and it is sent from your own Google account.**
 
