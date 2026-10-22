@@ -37,6 +37,8 @@ AI Based Email Assistant is an agent with a **human approval step** built into i
 
 ### LangGraph workflow
 
+![LangGraph workflow](email-agent/docs/graph.png)
+
 | Node | What it does |
 |---|---|
 | `retriever` | Finds the recipient address with code (regex), then asks the LLM only for the reason and recipient name. Stops with a clear error if the address is missing, unusable or ambiguous. |
